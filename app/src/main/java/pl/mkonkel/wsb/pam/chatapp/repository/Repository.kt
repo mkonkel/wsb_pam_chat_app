@@ -7,6 +7,6 @@ interface Repository {
 
     interface AuthCallback {
         fun onSuccess()
-        fun onFailure()
+        fun onFailure(throwable: Throwable?)
     }
 }

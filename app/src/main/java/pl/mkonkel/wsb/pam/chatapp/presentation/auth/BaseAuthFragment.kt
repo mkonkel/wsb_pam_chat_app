@@ -16,7 +16,7 @@ import timber.log.Timber
 open class BaseAuthFragment : Fragment() {
     interface FragmentAuthCallback {
         fun onSuccess()
-        fun onFailure()
+        fun onFailure(throwable: Throwable?)
     }
 
     protected var fragmentListener: FragmentAuthCallback? = null

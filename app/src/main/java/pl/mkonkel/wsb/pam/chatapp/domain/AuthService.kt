@@ -13,6 +13,6 @@ object AuthService {
     }
 
     fun register(email: String, password: String, authCallback: Repository.AuthCallback) {
-        AppInjector.repository.login(email, password, authCallback)
+        AppInjector.repository.register(email, password, authCallback)
     }
 }

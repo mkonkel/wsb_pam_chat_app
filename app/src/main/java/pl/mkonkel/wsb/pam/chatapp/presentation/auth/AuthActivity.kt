@@ -5,9 +5,11 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_auth.*
 import pl.mkonkel.wsb.pam.chatapp.R
+import pl.mkonkel.wsb.pam.chatapp.domain.utils.ErrorResolver
 import pl.mkonkel.wsb.pam.chatapp.presentation.BaseActivity
 
 class AuthActivity : BaseActivity(), BaseAuthFragment.FragmentAuthCallback {
@@ -28,11 +30,13 @@ class AuthActivity : BaseActivity(), BaseAuthFragment.FragmentAuthCallback {
     }
 
     override fun onSuccess() {
-        TODO("Not yet implemented")
+        start(Screen.USERS_LIST)
     }
 
-    override fun onFailure() {
-        TODO("Not yet implemented")
+    override fun onFailure(throwable: Throwable?) {
+        val message = ErrorResolver.handle(throwable)
+
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     private fun showLogin() {

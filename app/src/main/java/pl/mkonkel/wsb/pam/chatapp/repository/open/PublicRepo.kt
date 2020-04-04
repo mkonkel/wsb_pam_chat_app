@@ -6,6 +6,7 @@ import pl.mkonkel.wsb.pam.chatapp.AppInjector
 import pl.mkonkel.wsb.pam.chatapp.repository.LoggedInRepository
 import pl.mkonkel.wsb.pam.chatapp.repository.Repository
 import pl.mkonkel.wsb.pam.chatapp.repository.loggedIn.LoggedInRepo
+import timber.log.Timber
 
 internal class PublicRepo(private val context: Context) : Repository {
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -19,10 +20,11 @@ internal class PublicRepo(private val context: Context) : Repository {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     AppInjector.bindLoggedInRepo(createLoggedInRepository())
-
+                    Timber.i("Register OK")
                     callback.onSuccess()
                 } else {
-                    callback.onFailure()
+                    Timber.e(it.exception)
+                    callback.onFailure(it.exception)
                 }
             }
 
@@ -33,10 +35,11 @@ internal class PublicRepo(private val context: Context) : Repository {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     AppInjector.bindLoggedInRepo(createLoggedInRepository())
-
+                    Timber.i("Login OK")
                     callback.onSuccess()
                 } else {
-                    callback.onFailure()
+                    Timber.e(it.exception)
+                    callback.onFailure(it.exception)
                 }
             }
     }

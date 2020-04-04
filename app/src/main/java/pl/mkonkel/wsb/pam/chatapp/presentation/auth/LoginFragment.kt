@@ -36,9 +36,9 @@ class LoginFragment : BaseAuthFragment() {
             fragmentListener?.onSuccess()
         }
 
-        override fun onFailure() {
+        override fun onFailure(throwable: Throwable?) {
             toggleProgress()
-            fragmentListener?.onFailure()
+            fragmentListener?.onFailure(throwable)
         }
     }
 }

@@ -15,12 +15,12 @@ class RegisterFragment : BaseAuthFragment() {
         hello_text.text = "Hello!\nPlease create your awesome account!"
         submit_button.setOnClickListener {
             if (validate()) {
-                login()
+                register()
             }
         }
     }
 
-    private fun login() {
+    private fun register() {
         toggleProgress()
 
         authService.register(
@@ -36,9 +36,9 @@ class RegisterFragment : BaseAuthFragment() {
             fragmentListener?.onSuccess()
         }
 
-        override fun onFailure() {
+        override fun onFailure(throwable: Throwable?) {
             toggleProgress()
-            fragmentListener?.onFailure()
+            fragmentListener?.onFailure(throwable)
         }
     }
 }

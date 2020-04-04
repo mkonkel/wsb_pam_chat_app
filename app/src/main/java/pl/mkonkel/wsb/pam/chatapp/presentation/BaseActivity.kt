@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import pl.mkonkel.wsb.pam.chatapp.presentation.auth.AuthActivity
+import pl.mkonkel.wsb.pam.chatapp.presentation.main.UserListActivity
 import pl.mkonkel.wsb.pam.chatapp.presentation.util.LaunchIntentDecorator
 import pl.mkonkel.wsb.pam.chatapp.presentation.util.LaunchIntentExtractor
 
@@ -26,7 +27,7 @@ open class BaseActivity : AppCompatActivity() {
                 Intent(this, AuthActivity::class.java)
             }
             Screen.USERS_LIST -> {
-                Intent(this, AuthActivity::class.java)
+                Intent(this, UserListActivity::class.java)
             }
             Screen.UNKNOWN -> {
                 throw IllegalStateException("Unknown activity")
