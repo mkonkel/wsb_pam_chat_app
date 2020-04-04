@@ -1,3 +1,40 @@
 {
-
+  "project_info": {
+    "project_number": "246215946967",
+    "firebase_url": "https://chatapp-7090a.firebaseio.com",
+    "project_id": "chatapp-7090a",
+    "storage_bucket": "chatapp-7090a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246215946967:android:668e5a92802dd7c425f692",
+        "android_client_info": {
+          "package_name": "pl.mkonkel.wsb.pam.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "246215946967-fv76qs7186jca522donann1o3sgls6ng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz-QE6EnBlwxLkbsTn4Z2ycKRSBJJx28s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "246215946967-fv76qs7186jca522donann1o3sgls6ng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }
