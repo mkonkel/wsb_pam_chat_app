@@ -6,6 +6,6 @@ import pl.mkonkel.wsb.pam.chatapp.repository.LoggedInRepository
 
 interface LoggedInComponent {
     val loggedInRepo: LoggedInRepository
-    fun pushService(): PushService
-    fun tokenService(): TokenService
+    val pushService: PushService
+    val tokenService: TokenService
 }

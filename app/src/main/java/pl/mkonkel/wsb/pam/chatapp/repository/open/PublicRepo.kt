@@ -12,7 +12,12 @@ internal class PublicRepo(private val context: Context) : Repository {
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun isSessionActive(): Boolean {
-        return firebaseAuth.currentUser != null
+        return if (firebaseAuth.currentUser != null) {
+            AppInjector.createLoggedInComponent(createLoggedInRepository())
+            true
+        } else {
+            false
+        }
     }
 
     override fun register(email: String, password: String, callback: Repository.AuthCallback) {

@@ -23,17 +23,14 @@ object AppInjector {
     }
 
     fun createLoggedInComponent(loggedInRepository: LoggedInRepository) {
+        val tokenService = TokenService(loggedInRepository)
+
         this.loggedInComponent = object : LoggedInComponent {
-            override val loggedInRepo: LoggedInRepository
-                get() = loggedInRepository
+            override val loggedInRepo: LoggedInRepository = loggedInRepository
 
-            override fun pushService(): PushService {
-                return PushService(loggedInRepository)
-            }
+            override val tokenService: TokenService = tokenService
 
-            override fun tokenService(): TokenService {
-                return TokenService(loggedInRepository)
-            }
+            override val pushService: PushService = PushService(loggedInRepository, tokenService)
         }
     }
 }
