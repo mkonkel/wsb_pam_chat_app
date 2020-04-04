@@ -19,7 +19,7 @@ internal class PublicRepo(private val context: Context) : Repository {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    AppInjector.bindLoggedInRepo(createLoggedInRepository())
+                    AppInjector.createLoggedInComponent(createLoggedInRepository())
                     Timber.i("Register OK")
                     callback.onSuccess()
                 } else {
@@ -34,7 +34,7 @@ internal class PublicRepo(private val context: Context) : Repository {
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    AppInjector.bindLoggedInRepo(createLoggedInRepository())
+                    AppInjector.createLoggedInComponent(createLoggedInRepository())
                     Timber.i("Login OK")
                     callback.onSuccess()
                 } else {

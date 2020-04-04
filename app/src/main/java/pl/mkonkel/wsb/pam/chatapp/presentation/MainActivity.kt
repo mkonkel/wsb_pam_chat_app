@@ -2,11 +2,11 @@ package pl.mkonkel.wsb.pam.chatapp.presentation
 
 import android.os.Bundle
 import android.os.Handler
+import pl.mkonkel.wsb.pam.chatapp.AppInjector
 import pl.mkonkel.wsb.pam.chatapp.R
-import pl.mkonkel.wsb.pam.chatapp.domain.AuthService
 
 class MainActivity : BaseActivity() {
-    private val authService = AuthService
+    private val authService = AppInjector.publicComponent.authService()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

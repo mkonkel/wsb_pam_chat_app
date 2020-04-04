@@ -3,11 +3,11 @@ package pl.mkonkel.wsb.pam.chatapp.presentation.auth
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_base_auth.*
-import pl.mkonkel.wsb.pam.chatapp.domain.AuthService
+import pl.mkonkel.wsb.pam.chatapp.AppInjector
 import pl.mkonkel.wsb.pam.chatapp.repository.Repository
 
 class LoginFragment : BaseAuthFragment() {
-    private val authService = AuthService
+    private val authService = AppInjector.publicComponent.authService()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
