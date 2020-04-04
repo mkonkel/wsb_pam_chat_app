@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/fragment_register"
-        android:name="pl.mkonkel.wsb.pam.chatapp.login.RegisterFragment"
+        android:name="pl.mkonkel.wsb.pam.chatapp.presentation.auth.RegisterFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/navigation_text"
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/fragment_login"
-        android:name="pl.mkonkel.wsb.pam.chatapp.login.LoginFragment"
+        android:name="pl.mkonkel.wsb.pam.chatapp.presentation.auth.LoginFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/navigation_text"

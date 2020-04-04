@@ -1,4 +1,4 @@
-package pl.mkonkel.wsb.pam.chatapp
+package pl.mkonkel.wsb.pam.chatapp.presentation.auth
 
 import android.os.Bundle
 import android.text.Spannable
@@ -7,9 +7,10 @@ import android.text.style.ForegroundColorSpan
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_auth.*
-import pl.mkonkel.wsb.pam.chatapp.login.RegisterFragment
+import pl.mkonkel.wsb.pam.chatapp.R
+import pl.mkonkel.wsb.pam.chatapp.presentation.BaseActivity
 
-class AuthActivity : BaseActivity() {
+class AuthActivity : BaseActivity(), BaseAuthFragment.FragmentAuthCallback {
     private lateinit var loginFragment: Fragment
     private lateinit var registerFragment: Fragment
 
@@ -26,10 +27,18 @@ class AuthActivity : BaseActivity() {
         showLogin()
     }
 
+    override fun onSuccess() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFailure() {
+        TODO("Not yet implemented")
+    }
+
     private fun showLogin() {
         toggleFragment(loginFragment, registerFragment)
 
-        val topRow = "Don't have account yet?!\n\n"
+        val topRow = "Don't have account yet?!\n"
         val bottomRow = "REGISTER NOW!"
 
         navigation_text.setSpannedText(topRow, bottomRow)
@@ -41,7 +50,7 @@ class AuthActivity : BaseActivity() {
     private fun showRegister() {
         toggleFragment(registerFragment, loginFragment)
 
-        val topRow = "Got account?\n\n"
+        val topRow = "Got account?\n"
         val bottomRow = "LOGIN NOW!"
 
         navigation_text.setSpannedText(topRow, bottomRow)
