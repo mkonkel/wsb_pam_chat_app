@@ -3,6 +3,7 @@ package pl.mkonkel.wsb.pam.chatapp
 import pl.mkonkel.wsb.pam.chatapp.domain.AuthService
 import pl.mkonkel.wsb.pam.chatapp.domain.PushService
 import pl.mkonkel.wsb.pam.chatapp.domain.TokenService
+import pl.mkonkel.wsb.pam.chatapp.domain.UserService
 import pl.mkonkel.wsb.pam.chatapp.repository.LoggedInRepository
 import pl.mkonkel.wsb.pam.chatapp.repository.Repository
 import pl.mkonkel.wsb.pam.chatapp.repository.open.PublicRepo
@@ -31,6 +32,8 @@ object AppInjector {
             override val tokenService: TokenService = tokenService
 
             override val pushService: PushService = PushService(loggedInRepository, tokenService)
+
+            override val userService: UserService = UserService(loggedInRepository)
         }
     }
 }

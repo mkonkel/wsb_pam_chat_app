@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import pl.mkonkel.wsb.pam.chatapp.AppInjector
 import pl.mkonkel.wsb.pam.chatapp.repository.LoggedInRepository
 import pl.mkonkel.wsb.pam.chatapp.repository.Repository
+import pl.mkonkel.wsb.pam.chatapp.repository.db.Database
 import pl.mkonkel.wsb.pam.chatapp.repository.loggedIn.LoggedInRepo
 import timber.log.Timber
 
@@ -50,6 +51,6 @@ internal class PublicRepo(private val context: Context) : Repository {
     }
 
     private fun createLoggedInRepository(): LoggedInRepository {
-        return LoggedInRepo(context, firebaseAuth)
+        return LoggedInRepo(context, firebaseAuth, Database(context))
     }
 }
