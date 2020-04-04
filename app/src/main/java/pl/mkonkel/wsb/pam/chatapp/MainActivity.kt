@@ -1,11 +1,9 @@
 package pl.mkonkel.wsb.pam.chatapp
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private val firebaseAuth: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,8 +12,7 @@ class MainActivity : AppCompatActivity() {
 
 
         if (!firebaseAuth) {
-            val intent = Intent(this, AuthActivity::class.java)
-            startActivity(intent)
+            start(Screen.AUTH)
         } else {
             Timber.i("Should show Chat Main Screen")
         }
