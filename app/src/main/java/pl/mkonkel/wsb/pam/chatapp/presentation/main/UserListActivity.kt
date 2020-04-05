@@ -12,10 +12,11 @@ import pl.mkonkel.wsb.pam.chatapp.domain.utils.ErrorResolver
 import pl.mkonkel.wsb.pam.chatapp.presentation.BaseActivity
 import pl.mkonkel.wsb.pam.chatapp.repository.LoggedInRepository
 import pl.mkonkel.wsb.pam.chatapp.repository.model.Token
-import timber.log.Timber
 
 class UserListActivity : BaseActivity() {
     private val tokenService = AppInjector.loggedInComponent.tokenService
+    private val pushService = AppInjector.loggedInComponent.pushService
+
     private var adapter: TokenListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +34,11 @@ class UserListActivity : BaseActivity() {
                 }
 
                 override fun onFailure(throwable: Throwable) {
-                    Toast.makeText(this@UserListActivity, ErrorResolver.handle(throwable), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@UserListActivity,
+                        ErrorResolver.handle(throwable),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         )
@@ -54,6 +59,27 @@ class UserListActivity : BaseActivity() {
     }
 
     private fun onTokenClicked(token: Token) {
-        Timber.i("Selected token: $token")
+        pushService.sendPush(
+            fcmToken = token.token,
+            title = "Hello ${token.nickname?.substringBefore("@")}!",
+            message = "This is first test message!",
+            callback = object : LoggedInRepository.Callback<Unit> {
+                override fun onSuccess(value: Unit) {
+                    Toast.makeText(
+                        this@UserListActivity,
+                        "Push sent!",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onFailure(throwable: Throwable) {
+                    Toast.makeText(
+                        this@UserListActivity,
+                        ErrorResolver.handle(throwable),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        )
     }
 }

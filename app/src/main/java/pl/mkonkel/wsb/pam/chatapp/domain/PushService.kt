@@ -13,7 +13,7 @@ class PushService(
                 if (!task.isSuccessful) {
                     Timber.e("getInstanceId failed ${task.exception}")
                 }
-                
+
                 task.result?.token?.let {
                     tokenService.addMyToken(it)
                 }
