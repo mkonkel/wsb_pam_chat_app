@@ -26,4 +26,8 @@ internal class LoggedInRepo(
             database.addToken(it.uid, Token(nickname = it.email, token = fcmToken), callback)
         }
     }
+
+    override fun getTokens(callback: LoggedInRepository.Callback<List<Token>>) {
+        database.getTokens(callback)
+    }
 }
