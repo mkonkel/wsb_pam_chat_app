@@ -6,8 +6,11 @@ import pl.mkonkel.wsb.pam.chatapp.repository.model.Token
 interface LoggedInRepository {
     fun user(): FirebaseUser?
     fun logout(): Unit
+
     fun addFcmToken(fcmToken: String, callback: Callback<Unit>? = null)
     fun getTokens(callback: Callback<List<Token>>)
+
+    fun sendPushMessage(fcmToken: String, title: String, message: String, callback: Callback<Unit>)
 
     interface Callback<TYPE> {
         fun onSuccess(value: TYPE)

@@ -13,11 +13,19 @@ class PushService(
                 if (!task.isSuccessful) {
                     Timber.e("getInstanceId failed ${task.exception}")
                 }
-
-
+                
                 task.result?.token?.let {
                     tokenService.addMyToken(it)
                 }
             }
+    }
+
+    fun sendPush(
+        fcmToken: String,
+        title: String,
+        message: String,
+        callback: LoggedInRepository.Callback<Unit>
+    ) {
+        repository.sendPushMessage(fcmToken, title, message, callback)
     }
 }
