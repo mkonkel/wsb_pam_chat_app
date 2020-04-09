@@ -10,6 +10,7 @@ import pl.mkonkel.wsb.pam.chatapp.AppInjector
 import pl.mkonkel.wsb.pam.chatapp.R
 import pl.mkonkel.wsb.pam.chatapp.domain.utils.ErrorResolver
 import pl.mkonkel.wsb.pam.chatapp.presentation.BaseActivity
+import pl.mkonkel.wsb.pam.chatapp.presentation.chat.ChatActivity
 import pl.mkonkel.wsb.pam.chatapp.repository.LoggedInRepository
 import pl.mkonkel.wsb.pam.chatapp.repository.model.Token
 
@@ -59,28 +60,6 @@ class UserListActivity : BaseActivity() {
     }
 
     private fun onTokenClicked(token: Token) {
-        start(Screen.CHAT)
-//        pushService.sendPush(
-//            fcmToken = token.token,
-//            title = "Hello ${token.nickname?.substringBefore("@")}!",
-//            message = "This is first test message!",
-//            callback = object : LoggedInRepository.Callback<Unit> {
-//                override fun onSuccess(value: Unit) {
-//                    Toast.makeText(
-//                        this@UserListActivity,
-//                        "Push sent!",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//
-//                override fun onFailure(throwable: Throwable) {
-//                    Toast.makeText(
-//                        this@UserListActivity,
-//                        ErrorResolver.handle(throwable),
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            }
-//        )
+        start(Screen.CHAT, false, Pair(ChatActivity.FCM_TOKEN, token.token))
     }
 }

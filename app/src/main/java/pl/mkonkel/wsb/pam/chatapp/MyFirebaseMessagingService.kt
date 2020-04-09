@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -25,71 +26,80 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val title = remoteMessage.notification?.title ?: remoteMessage.data["title"] ?: ""
         val body = remoteMessage.notification?.body ?: remoteMessage.data["message"] ?: ""
 
-        createNotificationChannel()
-        notificationManager.notify(
-            getId(),
-            buildNotification(createPendingIntent(title, body), title)
-        )
+//        createNotificationChannel()
+//        notificationManager.notify(
+//            getId(),
+//            buildNotification(createPendingIntent(title, body), title)
+//        )
+
+        val intent = Intent(ChatMessageBroadcastReceiver.ACTION)
+        val extras = Bundle()
+        extras.putString(NOTIFICATION_MESSAGE_TITLE, title)
+        extras.putString(NOTIFICATION_MESSAGE_BODY, body)
+
+        intent.putExtras(extras)
+
+        sendBroadcast(intent)
     }
 
-    private fun buildNotification(
-        pendingIntent: PendingIntent,
-        notificationTitle: String?
-    ): Notification {
-        return NotificationCompat.Builder(
-                applicationContext,
-                NOTIFICATION_CHANNEL_ID
-            )
-            .setSmallIcon(R.drawable.ic_message_black_24dp)
-            .setContentTitle("New messages:")
-            .setContentText(notificationTitle)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
-    }
+//    private fun buildNotification(
+//        pendingIntent: PendingIntent,
+//        notificationTitle: String?
+//    ): Notification {
+//        return NotificationCompat.Builder(
+//                applicationContext,
+//                NOTIFICATION_CHANNEL_ID
+//            )
+//            .setSmallIcon(R.drawable.ic_message_black_24dp)
+//            .setContentTitle("New messages:")
+//            .setContentText(notificationTitle)
+//            .setContentIntent(pendingIntent)
+//            .setAutoCancel(true)
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//            .build()
+//    }
 
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                NOTIFICATION_CHANNEL_ID,
-                NOTIFICATION_CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
+//    private fun createNotificationChannel() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val notificationChannel = NotificationChannel(
+//                NOTIFICATION_CHANNEL_ID,
+//                NOTIFICATION_CHANNEL_NAME,
+//                NotificationManager.IMPORTANCE_DEFAULT
+//            )
+//
+//            notificationChannel.also {
+//                it.enableLights(true)
+//                it.enableVibration(true)
+//                it.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+//                it.description = "Simple chanel to show notifications from Firebase"
+//                it.lightColor = Color.CYAN
+//            }
+//
+//            // Register the channel
+//            notificationManager.createNotificationChannel(notificationChannel)
+//        }
+//    }
 
-            notificationChannel.also {
-                it.enableLights(true)
-                it.enableVibration(true)
-                it.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
-                it.description = "Simple chanel to show notifications from Firebase"
-                it.lightColor = Color.CYAN
-            }
-
-            // Register the channel
-            notificationManager.createNotificationChannel(notificationChannel)
-        }
-    }
-
-    private fun createPendingIntent(title: String?, body: String?): PendingIntent {
-
-        // Create pending intent to run detailActivity
-        val resultIntent = Intent(this, ChatActivity::class.java)
-
-        resultIntent.putExtra(NOTIFICATION_MESSAGE_TITLE, title)
-        resultIntent.putExtra(NOTIFICATION_MESSAGE_BODY, body)
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-        return PendingIntent.getActivity(
-            this,
-            NOTIFICATION_REQUEST_CODE,
-            resultIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
-
-    private fun getId(): Int {
-        return Random(500).nextInt()
-    }
+//    private fun createPendingIntent(title: String?, body: String?): PendingIntent {
+//
+//        // Create pending intent to run detailActivity
+//        val resultIntent = Intent(this, ChatActivity::class.java)
+//
+//        resultIntent.putExtra(NOTIFICATION_MESSAGE_TITLE, title)
+//        resultIntent.putExtra(NOTIFICATION_MESSAGE_BODY, body)
+//        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//
+//        return PendingIntent.getActivity(
+//            this,
+//            NOTIFICATION_REQUEST_CODE,
+//            resultIntent,
+//            PendingIntent.FLAG_UPDATE_CURRENT
+//        )
+//    }
+//
+//    private fun getId(): Int {
+//        return Random(500).nextInt()
+//    }
 
     companion object {
         const val NOTIFICATION_REQUEST_CODE = 666

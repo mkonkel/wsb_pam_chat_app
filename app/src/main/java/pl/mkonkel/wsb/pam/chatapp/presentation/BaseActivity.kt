@@ -16,10 +16,9 @@ open class BaseActivity : AppCompatActivity() {
         val screen = LaunchIntentExtractor.getScreen(intent)
         screenCustomSettings(screen)
         super.onCreate(savedInstanceState)
-
     }
 
-    fun start(screen: Screen, selfClose: Boolean = false) {
+    fun start(screen: Screen, selfClose: Boolean = false, vararg extras: Pair<String, String> = emptyArray()) {
         val intent: Intent = when (screen) {
             Screen.MAIN -> {
                 Intent(this, MainActivity::class.java)
@@ -39,6 +38,7 @@ open class BaseActivity : AppCompatActivity() {
         }
 
         LaunchIntentDecorator.decor(intent, screen)
+        LaunchIntentDecorator.addExtras(intent, *extras)
         this.startActivity(intent)
         if (selfClose) {
             finish()

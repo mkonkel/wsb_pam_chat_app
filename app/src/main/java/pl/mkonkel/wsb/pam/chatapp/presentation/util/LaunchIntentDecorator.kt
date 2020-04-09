@@ -8,6 +8,12 @@ object LaunchIntentDecorator {
     fun decor(intent: Intent, screen: BaseActivity.Screen) {
         intent.putExtra("screen", screen.name)
     }
+
+    fun addExtras(intent: Intent, vararg extras: Pair<String, String> = emptyArray()) {
+        extras.forEach {
+            intent.putExtra(it.first, it.second)
+        }
+    }
 }
 
 object LaunchIntentExtractor {
@@ -15,4 +21,8 @@ object LaunchIntentExtractor {
         intent.getStringExtra("screen")
             ?.let { BaseActivity.Screen.valueOf(it) }
             ?: BaseActivity.Screen.UNKNOWN
+
+    fun getExtra(intent: Intent, key: String): String? {
+        return intent.getStringExtra(key)
+    }
 }

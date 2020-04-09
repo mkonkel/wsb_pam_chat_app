@@ -50,19 +50,16 @@ class ChatListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             parent,
             false
         )
-    )
+    ) {
+        private val error: TextView = itemView.findViewById(R.id.error)
+
+        fun bind(element: Message) {
+            error.text = element.message ?: "Something went wrong!"
+        }
+    }
 
     fun addItem(item: Message) {
         this.items.add(item)
-
-        notifyDataSetChanged()
-    }
-
-    fun setItems(items: List<Message>) {
-        this.items.clear()
-        items.let {
-            this.items.addAll(it)
-        }
 
         notifyDataSetChanged()
     }
@@ -77,6 +74,7 @@ class ChatListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return when (viewType.toMessageType()) {
             Message.Type.INCOMMING -> ViewHolderIncomming(inflater, parent)
             Message.Type.OUTGOING -> ViewHolderOngoing(inflater, parent)
+            Message.Type.ERROR,
             Message.Type.UNKNOWN -> ViewHolderError(inflater, parent)
         }
     }
@@ -95,7 +93,7 @@ class ChatListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 holder.bind(element)
             }
             is ViewHolderError -> {
-                // no-op
+                holder.bind(element)
             }
             else -> {
                 Timber.e("Unrecognized ViewHolder!")
@@ -107,7 +105,7 @@ class ChatListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return when (this) {
             Message.Type.INCOMMING -> 1
             Message.Type.OUTGOING -> 0
-            Message.Type.UNKNOWN -> -1
+            else -> -1
         }
     }
 

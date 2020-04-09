@@ -1,40 +1,77 @@
 package pl.mkonkel.wsb.pam.chatapp.presentation.chat
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_chat.*
+import pl.mkonkel.wsb.pam.chatapp.AppInjector
+import pl.mkonkel.wsb.pam.chatapp.ChatMessageBroadcastReceiver
 import pl.mkonkel.wsb.pam.chatapp.R
 import pl.mkonkel.wsb.pam.chatapp.domain.model.Message
+import pl.mkonkel.wsb.pam.chatapp.domain.utils.ErrorResolver
 import pl.mkonkel.wsb.pam.chatapp.presentation.BaseActivity
-import timber.log.Timber
+import pl.mkonkel.wsb.pam.chatapp.presentation.util.LaunchIntentExtractor
+import pl.mkonkel.wsb.pam.chatapp.repository.LoggedInRepository
 
 class ChatActivity : BaseActivity() {
-    private var adapter: ChatListAdapter? = null
+    private val pushService = AppInjector.loggedInComponent.pushService
 
+    private var adapter: ChatListAdapter? = null
+    private lateinit var chatBroadcastReceiver: BroadcastReceiver
+    private var fcmToken: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        setItems(getRandomMEssages())
+        fcmToken = LaunchIntentExtractor.getExtra(intent, FCM_TOKEN)
+
+        setAdapter()
+        registerChatReciever()
 
         icon_send.setOnClickListener {
-            val msg = message_text.text.toString()
+            message_text.text?.let {
+                if (it.toString().isNotBlank()) {
+                    val message = Message.ofOutgoing(message = it.toString())
+                    addMessageToRecycler(message)
+                    sendMessage(message, fcmToken)
+                }
+            }
+
             message_text.setText("")
-
-            setItem(
-                Message(
-                    message = msg,
-                    timestamp = "now",
-                    type = Message.Type.OUTGOING
-                )
-            )
-
         }
     }
 
-    private fun setItems(elements: List<Message>) {
+    override fun onStop() {
+        super.onStop()
+
+        unregisterReceiver(chatBroadcastReceiver)
+    }
+
+    private fun registerChatReciever() {
+        chatBroadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                intent?.let {
+                    val title = it.getStringExtra(ChatMessageBroadcastReceiver.MESSAGE_TITLE)
+                    val body = it.getStringExtra(ChatMessageBroadcastReceiver.MESSAGE_BODY)
+
+                    if (!body.isNullOrEmpty()) {
+                        val message = Message.ofIncoming(message = body)
+                        addMessageToRecycler(message)
+                    }
+                }
+            }
+        }
+
+        registerReceiver(chatBroadcastReceiver, IntentFilter(ChatMessageBroadcastReceiver.ACTION))
+    }
+
+    private fun setAdapter() {
         if (adapter == null) {
             adapter = ChatListAdapter()
         }
@@ -51,47 +88,39 @@ class ChatActivity : BaseActivity() {
                 })
             }
         }
-
-        adapter?.setItems(elements)
-
     }
 
-    private fun setItem(element: Message) {
-        if (adapter == null) {
-            adapter = ChatListAdapter()
-        }
+    private fun addMessageToRecycler(message: Message) {
+        adapter?.addItem(message)
+    }
 
-        (chat_items as RecyclerView).also { rv ->
-            val manager = LinearLayoutManager(this).also { it.stackFromEnd = true }
-            rv.layoutManager = manager
-
-            rv.adapter = adapter?.also {
-                it.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-                    override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                        manager.smoothScrollToPosition(chat_items, null, 0)
+    private fun sendMessage(message: Message, token: String?) {
+        if (token != null) {
+            pushService.sendPush(
+                fcmToken = token,
+                title = "",
+                message = message.message ?: "",
+                callback = object : LoggedInRepository.Callback<Unit> {
+                    override fun onSuccess(value: Unit) {
+                        Toast.makeText(
+                            this@ChatActivity,
+                            "sending...",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                })
-            }
-        }
 
-        adapter?.addItem(element)
+                    override fun onFailure(throwable: Throwable) {
+                        val errorMsg = Message.ofError(ErrorResolver.handle(throwable))
+                        addMessageToRecycler(errorMsg)
+                    }
+                }
+            )
+        } else {
+            Toast.makeText(this@ChatActivity, "An Error occurred!", Toast.LENGTH_LONG).show()
+        }
     }
 
-    private fun getRandomMEssages(): List<Message> {
-        fun randomMsg(int: Int): String {
-            return when (int) {
-                0 -> "Al contrario di quanto si pensi, Lorem Ipsum non è semplicemente una sequenza casuale di caratteri. Risale ad un classico della letteratura latina del 45 AC"
-                else -> "Esistono innumerevoli variazioni dei passaggi del Lorem Ipsum"
-            }
-        }
-
-        return (1..20).map {
-                Message(
-                    type = if (it % 2 == 0) Message.Type.INCOMMING else Message.Type.OUTGOING,
-                    message = randomMsg(it % 3),
-                    timestamp = "Just now..."
-                )
-            }
-            .onEach { Timber.i((it.type.name)) }
+    companion object {
+        const val FCM_TOKEN = "fcm_token"
     }
 }
