@@ -59,27 +59,28 @@ class UserListActivity : BaseActivity() {
     }
 
     private fun onTokenClicked(token: Token) {
-        pushService.sendPush(
-            fcmToken = token.token,
-            title = "Hello ${token.nickname?.substringBefore("@")}!",
-            message = "This is first test message!",
-            callback = object : LoggedInRepository.Callback<Unit> {
-                override fun onSuccess(value: Unit) {
-                    Toast.makeText(
-                        this@UserListActivity,
-                        "Push sent!",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-
-                override fun onFailure(throwable: Throwable) {
-                    Toast.makeText(
-                        this@UserListActivity,
-                        ErrorResolver.handle(throwable),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-        )
+        start(Screen.CHAT)
+//        pushService.sendPush(
+//            fcmToken = token.token,
+//            title = "Hello ${token.nickname?.substringBefore("@")}!",
+//            message = "This is first test message!",
+//            callback = object : LoggedInRepository.Callback<Unit> {
+//                override fun onSuccess(value: Unit) {
+//                    Toast.makeText(
+//                        this@UserListActivity,
+//                        "Push sent!",
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
+//
+//                override fun onFailure(throwable: Throwable) {
+//                    Toast.makeText(
+//                        this@UserListActivity,
+//                        ErrorResolver.handle(throwable),
+//                        Toast.LENGTH_LONG
+//                    ).show()
+//                }
+//            }
+//        )
     }
 }
